@@ -1,7 +1,7 @@
 # Celestia Inscription Minter
 
 > [!WARNING]  
-> Not battle tested.
+> Not battle tested. Use at your own risks.
 
 Code reference: [qzz0518/coss](https://github.com/qzz0518/coss)
 Forked from: [sfter/cias-mint](https://github.com/sfter/cias-mint)
@@ -10,6 +10,7 @@ Forked from: [sfter/cias-mint](https://github.com/sfter/cias-mint)
 
 ```bash
 git clone git@github.com:akhercha/celestia-inscription-mint.git
+cd celestia-inscription-mint
 bun install
 cp .env.example .env
 ```
