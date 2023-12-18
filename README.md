@@ -1,5 +1,8 @@
 # Celestia Inscription Minter
 
+> [!WARNING]  
+> Not battle tested.
+
 Code reference: [qzz0518/coss](https://github.com/qzz0518/coss)
 Forked from: [sfter/cias-mint](https://github.com/sfter/cias-mint)
 
