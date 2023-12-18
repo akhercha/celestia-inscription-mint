@@ -6,7 +6,7 @@ Forked from: [sfter/cias-mint](https://github.com/sfter/cias-mint)
 ## Step 1: Installation
 
 ```bash
-git clone https://github.com/akhercha/cias-mint
+git clone git@github.com:akhercha/celestia-inscription-mint.git
 bun install
 cp .env.example .env
 ```
