@@ -15,7 +15,7 @@ const CHAIN = "celestia";
 
 // Mint informations
 const MEMO_MINT_DATA = `data:,{"op":"mint","amt":10000,"tick":"cias","p":"cia-20"}`;
-const NUMBER_OF_TIMES_TO_MINT = 2;
+const NUMBER_OF_TIMES_TO_MINT = 100;
 const TIME_TO_WAIT_BETWEEN_FAILURES = 1000; // in milliseconds
 
 // ----------------------------------------------------------------------------
@@ -44,7 +44,7 @@ async function performTransaction(privateKey, numberOfTimes) {
     console.log(`Attempt ${attemptCount + 1}...`);
     try {
       const [account] = await wallet.getAccounts();
-      const amount = coins(1, DENOM); // Transfer 1 unit to self
+      const amount = coins(100, DENOM); // Transfer 1 unit to self
       const result = await client.sendTokens(
         account.address,
         account.address,
