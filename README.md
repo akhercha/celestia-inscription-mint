@@ -22,7 +22,20 @@ NODE_URL=https://public-celestia-rpc.numia.xyz
 PRIVATE_KEY=
 ```
 
-## Step 3: Run the Mint Program to Start Minting
+## Step 3: Update the configuration at the top of `mint.ts`
+
+```typescript
+// Chain configuration (here Celestia)
+const DENOM = "utia";
+const CHAIN = "celestia";
+
+// Mint informations
+const MEMO_MINT_DATA = `data:,{"op":"mint","amt":10000,"tick":"cias","p":"cia-20"}`;
+const NUMBER_OF_TIMES_TO_MINT = 2;
+const TIME_TO_WAIT_BETWEEN_FAILURES = 1000; // in milliseconds
+```
+
+## Step 4: Run the Mint Program to Start Minting
 
 ```bash
 bun run mint.ts
