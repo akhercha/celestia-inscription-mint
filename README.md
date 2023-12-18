@@ -1,4 +1,4 @@
-# Celestia ($TIA) Public Chain Inscription cias mint Script
+# Celestia Inscription Minter
 
 Code reference: [qzz0518/coss](https://github.com/qzz0518/coss)
 Forked from: [sfter/cias-mint](https://github.com/sfter/cias-mint)
