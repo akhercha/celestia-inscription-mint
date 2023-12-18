@@ -53,19 +53,19 @@ MINT_TIMES=10
 ## Step 3: Generate wallets
 
 ```bash
-node wallet_gen.js
+bun wallet_gen.js
 ```
 
 ## Step 4: Step 4: Batch Transfer from Main Wallet (Funding Wallet) to Mint Wallets
 
 ```bash
-node transfer.js
+bun transfer.js
 ```
 
 ## Step 5: Run the Mint Program to Start Minting
 
 ```bash
-node mint.js
+bun mint.js
 ```
 
 ## Notes
@@ -73,10 +73,10 @@ node mint.js
 If you cannot export the private key from the Keplr wallet, you can do so through the following method:
 
 1. First, configure the `.env` file, leaving `PRIVATE_KEY` blank.
-2. Use `node wallet_gen.js` to generate wallets
+2. Use `bun wallet_gen.js` to generate wallets
 3. Open the `wallet.json` file in the current directory
 4. Select any wallet as the main wallet.
 5. Open the Keplr wallet, transfer some $TIA to the wallet address you selected in step 4 above.
 6. Configure the wallet address you selected in step 4 above in the `PRIVATE_KEY` field in the `.env` file.
-7. Execute `node transfer.js` to batch transfer from the wallet selected in step 4 to other Mint wallets.
-8. Execute `node mint.js` to start batch Minting, completion OK.
+7. Execute `bun transfer.js` to batch transfer from the wallet selected in step 4 to other Mint wallets.
+8. Execute `bun mint.js` to start batch Minting, completion OK.
