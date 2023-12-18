@@ -8,18 +8,14 @@ dotenv.config();
 // ----------------------------------------------------------------------------
 
 // Chain configuration (here Celestia)
-
 const DENOM = "utia";
 const CHAIN = "celestia";
-const GAS_PRICE = 10000;
-const GAS_LIMIT = 100000;
 
 // ----------------------------------------------------------------------------
 
 // Mint informations
-
 const MEMO_MINT_DATA = `data:,{"op":"mint","amt":10000,"tick":"cias","p":"cia-20"}`;
-const NUMBER_OF_TIMES_TO_MINT = 100;
+const NUMBER_OF_TIMES_TO_MINT = 2;
 const TIME_TO_WAIT_BETWEEN_FAILURES = 1000; // in milliseconds
 
 // ----------------------------------------------------------------------------
@@ -41,14 +37,11 @@ async function performTransaction(privateKey, numberOfTimes) {
     { gasPrice: GasPrice.fromString(`0.025${DENOM}`) }
   );
 
-  const fee: any = {
-    amount: coins(GAS_PRICE, DENOM),
-    gas: GAS_LIMIT,
-  };
-
   let successCount = 0;
   let attemptCount = 0;
-  while (successCount < numberOfTimes) {
+  console.log("--------------------------------------------------");
+  while (attemptCount < numberOfTimes) {
+    console.log(`Attempt ${attemptCount + 1}...`);
     try {
       const [account] = await wallet.getAccounts();
       const amount = coins(1, DENOM); // Transfer 1 unit to self
@@ -56,24 +49,26 @@ async function performTransaction(privateKey, numberOfTimes) {
         account.address,
         account.address,
         amount,
-        fee,
+        "auto",
         base64FromBytes(Buffer.from(MEMO_MINT_DATA, "utf8"))
       );
       console.log(
-        `${account.address}, Successful operation ${successCount + 1}: ${
+        `Successful mint: ${
           `https://www.mintscan.io/${CHAIN}/tx/` + result.transactionHash
-        }`
+        }\n`
       );
       successCount++;
     } catch (error) {
-      console.error(`Attempt ${attemptCount + 1} failed: `, error);
+      console.error(`Attempt ${attemptCount + 1} failed: `, error.message);
       await new Promise((resolve) =>
         setTimeout(resolve, TIME_TO_WAIT_BETWEEN_FAILURES)
       );
     }
     attemptCount++;
   }
-  console.log(`${successCount} / ${attemptCount} successful mints`);
+  console.log("--------------------------------------------------");
+  console.log("Minting completed!");
+  console.log(`${successCount} / ${attemptCount} successful attempts`);
 }
 
 async function main() {
@@ -81,6 +76,7 @@ async function main() {
   if (privateKey === "") {
     throw new Error("PRIVATE_KEY in .env must be defined");
   }
+  console.log(`Minting ${NUMBER_OF_TIMES_TO_MINT} times...`);
   await performTransaction(privateKey, NUMBER_OF_TIMES_TO_MINT);
 }
 
