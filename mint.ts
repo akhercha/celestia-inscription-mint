@@ -15,9 +15,9 @@ const CHAIN = "celestia";
 
 // Mint informations
 const MEMO_MINT_DATA = `data:,{"op":"mint","amt":10000,"tick":"cias","p":"cia-20"}`;
-const NUMBER_OF_TIMES_TO_MINT = 100;
-const TIME_TO_WAIT_BETWEEN_FAILURES = 1000; // in milliseconds
-const AMOUNT_TO_SELF_SEND = 100;
+const NUMBER_OF_TIMES_TO_MINT = 500;
+const TIME_TO_WAIT_BETWEEN_FAILURES = 5000; // in milliseconds
+const AMOUNT_TO_SELF_SEND = 1;
 
 // ----------------------------------------------------------------------------
 
@@ -50,7 +50,10 @@ async function performTransaction(privateKey, numberOfTimes) {
         account.address,
         account.address,
         amount,
-        "auto",
+        {
+          amount: coins(120000, DENOM),
+          gas: "140000",
+        },
         base64FromBytes(Buffer.from(MEMO_MINT_DATA, "utf8"))
       );
       console.log(
