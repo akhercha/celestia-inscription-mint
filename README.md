@@ -1,96 +1,82 @@
-# Celestia(tia) 公链铭文 cias mint 脚本
+# Celestia ($TIA) Public Chain Inscription cias mint Script
 
-## 代码参考 [qzz0518/coss](https://github.com/qzz0518/coss)
+Code reference: [qzz0518/coss](https://github.com/qzz0518/coss)
+Forked from: [sfter/cias-mint](https://github.com/sfter/cias-mint)
 
-### Step 1: 安装
+## Step 1: Installation
 
-```
-git clone https://github.com/sfter/cias-mint
-yarn install
+```bash
+git clone https://github.com/akhercha/cias-mint
+bun install
 cp .env.example .env
 ```
 
-### Step 2: 配置环境变量
-
-在脚本源代码目录下修改 .env 文件
+## Step 2: Configuration of the environment variables
 
 ```bash
-# rpc配置, 可以从 https://atomscan.com/directory/celestia 找到自己喜欢的节点服务器
+# RPC configuration, you can find your preferred node server at https://atomscan.com/directory/celestia
 NODE_URL=https://public-celestia-rpc.numia.xyz
 # NODE_URL=https://celestia-rpc.mesa.newmetric.xyz
 
-# 主钱包（资金钱包）私钥, 用于转账给其它真正用来 Mint 的钱包
+# Main wallet (funding wallet) private key, used to transfer funds to other wallets actually used for Minting
 PRIVATE_KEY=
 
-# 生成钱包配置,按需配置
-# 生成多少个 Mint 钱包
+# Wallet generation configuration, configure as needed
+# Number of Mint wallets to generate
 NUM_OF_WALLETS=5
-# 真正 Mint 的钱包文件，所有生成的钱包都在这个文件里
+# File for wallets actually used for Mint, all generated wallets are in this file
 WALLET_JSON_FILE=wallets.json
 
-# celestia配置（可以不用动）
+# Celestia configuration (can be left as is)
 CHAIN_SYMBOL=celestia
 TOKEN_DENOM=utia
 TOKEN_DECIMAL=1000000
 
-# 从主钱包（资金钱包）转多少个 TIA 到 每个真正 Mint 的钱包
+# Amount of TIA to transfer from the main wallet (funding wallet) to each wallet actually used for Mint
 TOKEN_TRANSFER_AMOUNT=2
 
-# gas 配置, 按需修改
+# Gas configuration, modify as needed
 GAS_PRICE=10000
 GAS_LIMIT=100000
 
-# mint配置, 一定要根据官方参数配置
+# Mint configuration, must be configured according to official parameters
 MINT_AMOUNT=10000
-# 铭文代币名称
+# Inscription token name
 TICK=cias
-# 协议类型
+# Protocol type
 PROTOCOL=cia-20
 
-# 每个钱包 mint 次数
+# Number of times each wallet mints
 MINT_TIMES=10
-
 ```
 
-### Step 3: 批量生成 Mint 钱包
+## Step 3: Generate wallets
 
 ```bash
 node wallet_gen.js
 ```
 
-### Step 4: 从主钱包（资金钱包）批量转帐到 Mint 钱包
+## Step 4: Step 4: Batch Transfer from Main Wallet (Funding Wallet) to Mint Wallets
 
 ```bash
 node transfer.js
 ```
 
-### Step 5: 运行 Mint 程序开始 Mint
+## Step 5: Run the Mint Program to Start Minting
 
 ```bash
 node mint.js
 ```
 
-### 特别说明
-如果 keplr 钱包导不出私钥，可以通过如下方法来做
-> - 先把 .env 文件配置好，PRIVATE_KEY 留空。
->
-> 
-> - 使用 node wallet_gen.js 生成钱包
-> 
-> 
-> - 打开当前目录下的 wallet.json 文件
->
-> 
-> - 选择其中任意一个钱包做为主钱包。
-> 
-> 
-> - 打开 keplr 钱包，向你在上面第4步选择的钱包地址转一些 $TIA 进去。
-> 
-> 
-> - 将上面第4步选择的钱包地址配置到 .env 文件里的 PRIVATE_KEY 字段里。
-> 
-> 
-> - 执行 node transfer.js 将会从上面第4步选择的钱包向其它 Mint 的钱包批量转帐。
-> 
-> 
-> - 执行 node mint.js 开始批量 Mint，完成 OK。
+## Notes
+
+If you cannot export the private key from the Keplr wallet, you can do so through the following method:
+
+1. First, configure the `.env` file, leaving `PRIVATE_KEY` blank.
+2. Use `node wallet_gen.js` to generate wallets
+3. Open the `wallet.json` file in the current directory
+4. Select any wallet as the main wallet.
+5. Open the Keplr wallet, transfer some $TIA to the wallet address you selected in step 4 above.
+6. Configure the wallet address you selected in step 4 above in the `PRIVATE_KEY` field in the `.env` file.
+7. Execute `node transfer.js` to batch transfer from the wallet selected in step 4 to other Mint wallets.
+8. Execute `node mint.js` to start batch Minting, completion OK.
