@@ -1,9 +1,12 @@
-# Celestia Inscription Minter
+# Cosmos Inscriptions Mint
+
+Small script to automate the minting of inscriptions in the Cosmos ecosystem.
 
 > [!WARNING]  
 > Not battle tested. Use at your own risks.
 
 Code reference: [qzz0518/coss](https://github.com/qzz0518/coss)
+
 Forked from: [sfter/cias-mint](https://github.com/sfter/cias-mint)
 
 ## Step 1: Installation
@@ -39,8 +42,8 @@ const NUMBER_OF_TIMES_TO_MINT = 2;
 const TIME_TO_WAIT_BETWEEN_FAILURES = 1000; // in milliseconds
 ```
 
-## Step 4: Run the Mint Program to Start Minting
+## Step 4: Start minting
 
 ```bash
-bun run mint.ts
+bun run mint
 ```
