@@ -21,12 +21,16 @@ const AMOUNT_TO_SELF_SEND = 1;
 
 // ----------------------------------------------------------------------------
 
-async function performTransaction(privateKey, numberOfTimes) {
+const mint = async (
+  privateKey: string,
+  numberOfTimes: number = NUMBER_OF_TIMES_TO_MINT
+): Promise<void> => {
   const rpcEndpoint = process.env.NODE_URL || "";
   if (rpcEndpoint === "") {
     throw new Error("NODE_URL in .env must be defined");
   }
 
+  console.log(`Minting ${numberOfTimes} times...`);
   const wallet = await DirectSecp256k1Wallet.fromKey(
     Buffer.from(privateKey, "hex"),
     CHAIN
@@ -73,15 +77,14 @@ async function performTransaction(privateKey, numberOfTimes) {
   console.log("--------------------------------------------------");
   console.log("Minting completed!");
   console.log(`${successCount} / ${attemptCount} successful attempts`);
-}
+};
 
-async function main() {
+const main = async () => {
   const privateKey = process.env.PRIVATE_KEY || "";
   if (privateKey === "") {
     throw new Error("PRIVATE_KEY in .env must be defined");
   }
-  console.log(`Minting ${NUMBER_OF_TIMES_TO_MINT} times...`);
-  await performTransaction(privateKey, NUMBER_OF_TIMES_TO_MINT);
-}
+  await mint(privateKey);
+};
 
 main();

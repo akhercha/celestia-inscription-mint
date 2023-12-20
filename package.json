@@ -1,8 +1,11 @@
 {
   "name": "cias",
   "version": "1.0.0",
-  "main": "mint.js",
+  "main": "src/mint.ts",
   "license": "MIT",
+  "scripts": {
+    "mint": "bun run src/mint.ts"
+  },
   "dependencies": {
     "@cosmjs/crypto": "^0.32.0",
     "@cosmjs/encoding": "^0.32.0",
