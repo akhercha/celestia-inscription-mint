@@ -1,6 +1,12 @@
 import dotenv from "dotenv";
-import { SigningStargateClient, GasPrice, coins } from "@cosmjs/stargate";
-import { DirectSecp256k1Wallet } from "@cosmjs/proto-signing";
+import {
+  SigningStargateClient,
+  GasPrice,
+  coins,
+  DeliverTxResponse,
+  StdFee,
+} from "@cosmjs/stargate";
+import { Coin, DirectSecp256k1Wallet } from "@cosmjs/proto-signing";
 import { base64FromBytes } from "cosmjs-types/helpers";
 
 dotenv.config();
@@ -23,41 +29,41 @@ const AMOUNT_TO_SELF_SEND = 1;
 
 const mint = async (
   privateKey: string,
+  rpcEndpoint: string,
   numberOfTimes: number = NUMBER_OF_TIMES_TO_MINT
 ): Promise<void> => {
-  const rpcEndpoint = process.env.NODE_URL || "";
-  if (rpcEndpoint === "") {
-    throw new Error("NODE_URL in .env must be defined");
-  }
-
-  console.log(`Minting ${numberOfTimes} times...`);
-  const wallet = await DirectSecp256k1Wallet.fromKey(
+  const wallet: DirectSecp256k1Wallet = await DirectSecp256k1Wallet.fromKey(
     Buffer.from(privateKey, "hex"),
     CHAIN
   );
+  const client: SigningStargateClient =
+    await SigningStargateClient.connectWithSigner(rpcEndpoint, wallet, {
+      gasPrice: GasPrice.fromString(`0.025${DENOM}`),
+    });
 
-  const client = await SigningStargateClient.connectWithSigner(
-    rpcEndpoint,
-    wallet,
-    { gasPrice: GasPrice.fromString(`0.025${DENOM}`) }
-  );
-
-  let successCount = 0;
-  let attemptCount = 0;
+  let successCount: number = 0;
+  let attemptCount: number = 0;
+  console.log(`Minting ${numberOfTimes} times...`);
   console.log("--------------------------------------------------");
+
   while (attemptCount < numberOfTimes) {
     console.log(`Attempt ${attemptCount + 1}...`);
     try {
       const [account] = await wallet.getAccounts();
-      const amount = coins(AMOUNT_TO_SELF_SEND, DENOM);
-      const result = await client.sendTokens(
+      const amount: Coin[] = coins(AMOUNT_TO_SELF_SEND, DENOM);
+
+      // TODO: set a correct fee & increase everytime it fails
+      // can also be "auto"
+      const fees: StdFee = {
+        amount: coins(120000, DENOM),
+        gas: "140000",
+      };
+
+      const result: DeliverTxResponse = await client.sendTokens(
         account.address,
         account.address,
         amount,
-        {
-          amount: coins(120000, DENOM),
-          gas: "140000",
-        },
+        fees,
         base64FromBytes(Buffer.from(MEMO_MINT_DATA, "utf8"))
       );
       console.log(
@@ -81,10 +87,11 @@ const mint = async (
 
 const main = async () => {
   const privateKey = process.env.PRIVATE_KEY || "";
-  if (privateKey === "") {
-    throw new Error("PRIVATE_KEY in .env must be defined");
+  const rpcEndpoint = process.env.NODE_URL || "";
+  if (privateKey === "" || rpcEndpoint === "") {
+    throw new Error(".env variables must be defined. See .env.example");
   }
-  await mint(privateKey);
+  await mint(privateKey, rpcEndpoint);
 };
 
 main();
