@@ -27,6 +27,13 @@ const AMOUNT_TO_SELF_SEND = 1;
 
 // ----------------------------------------------------------------------------
 
+/**
+ * Mint inscriptions. Basically just self-send some coins with a memo.
+ *
+ * @param privateKey - The private key of the account to mint from.
+ * @param rpcEndpoint - The RPC endpoint of the chain.
+ * @param numberOfTimes - The number of times to mint.
+ */
 const mint = async (
   privateKey: string,
   rpcEndpoint: string,
@@ -41,6 +48,10 @@ const mint = async (
       gasPrice: GasPrice.fromString(`0.025${DENOM}`),
     });
 
+  const [account] = await wallet.getAccounts();
+  const amount: Coin[] = coins(AMOUNT_TO_SELF_SEND, DENOM);
+  const memo: string = base64FromBytes(Buffer.from(MEMO_MINT_DATA, "utf8"));
+
   let successCount: number = 0;
   let attemptCount: number = 0;
   console.log(`Minting ${numberOfTimes} times...`);
@@ -49,22 +60,18 @@ const mint = async (
   while (attemptCount < numberOfTimes) {
     console.log(`Attempt ${attemptCount + 1}...`);
     try {
-      const [account] = await wallet.getAccounts();
-      const amount: Coin[] = coins(AMOUNT_TO_SELF_SEND, DENOM);
-
       // TODO: set a correct fee & increase everytime it fails
       // can also be "auto"
       const fees: StdFee = {
         amount: coins(120000, DENOM),
         gas: "140000",
       };
-
       const result: DeliverTxResponse = await client.sendTokens(
         account.address,
         account.address,
         amount,
         fees,
-        base64FromBytes(Buffer.from(MEMO_MINT_DATA, "utf8"))
+        memo
       );
       console.log(
         `Successful mint: ${
